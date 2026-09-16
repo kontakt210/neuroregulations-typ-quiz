@@ -1,0 +1,573 @@
+<title>Neuroregulations-Typ Quiz</title>
+<style>
+  :root {
+    --bg: #ffffff;
+    --surface: #f4f4f4;
+    --surface-hover: #e9e9e9;
+    --fg: #161616;
+    --muted: #5c5c5c;
+    --border: #cfcfcf;
+    --border-strong: #161616;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #121212;
+      --surface: #1d1d1d;
+      --surface-hover: #262626;
+      --fg: #f2f2f2;
+      --muted: #a8a8a8;
+      --border: #3a3a3a;
+      --border-strong: #f2f2f2;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #121212;
+    --surface: #1d1d1d;
+    --surface-hover: #262626;
+    --fg: #f2f2f2;
+    --muted: #a8a8a8;
+    --border: #3a3a3a;
+    --border-strong: #f2f2f2;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  .app {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  h1 {
+    font-size: 1.6rem;
+    line-height: 1.25;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .subtitle {
+    color: var(--muted);
+    margin: 0;
+    max-width: 60ch;
+  }
+  .card {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  progress {
+    width: 100%;
+    height: 6px;
+    appearance: none;
+    border: none;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  progress::-webkit-progress-bar { background: var(--border); border-radius: 3px; }
+  progress::-webkit-progress-value { background: var(--fg); border-radius: 3px; }
+  progress::-moz-progress-bar { background: var(--fg); }
+
+  fieldset {
+    border: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  legend {
+    padding: 0;
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.4;
+    text-wrap: balance;
+  }
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    background: var(--bg);
+    cursor: pointer;
+    line-height: 1.45;
+  }
+  .option:hover { background: var(--surface-hover); }
+  .option input {
+    margin-top: 3px;
+    accent-color: var(--fg);
+    flex-shrink: 0;
+  }
+  .option.selected {
+    border-color: var(--border-strong);
+  }
+
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  button {
+    font: inherit;
+    font-weight: 600;
+    padding: 11px 22px;
+    border-radius: 7px;
+    border: 1px solid var(--fg);
+    background: var(--fg);
+    color: var(--bg);
+    cursor: pointer;
+  }
+  button:disabled { opacity: 0.35; cursor: not-allowed; }
+  button:focus-visible, .option input:focus-visible, .link-button:focus-visible {
+    outline: 2px solid var(--border-strong);
+    outline-offset: 2px;
+  }
+  button.secondary {
+    background: transparent;
+    color: var(--fg);
+    border: 1px solid var(--border);
+  }
+  .link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    color: var(--muted);
+    font: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+  }
+
+  .section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .section-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  ul.plain {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  ul.plain li {
+    border-left: 2px solid var(--border-strong);
+    padding-left: 14px;
+  }
+  ol.steps {
+    margin: 0;
+    padding-left: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  ol.steps li { padding-left: 4px; }
+
+  .secondary-note {
+    font-size: 0.92rem;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin: 0;
+  }
+  .disclaimer {
+    font-size: 0.82rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 18px;
+    margin-top: 8px;
+  }
+</style>
+
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+
+<script>
+(function () {
+  const h = React.createElement;
+  const useState = React.useState;
+
+  const QUESTIONS = [
+    {
+      text: "Wie reagiert Dein Körper zuerst, wenn plötzlich Druck entsteht — z. B. eine kurzfristige Deadline?",
+      options: [
+        { type: "kampf", label: "Anspannung, Kiefer beißt zusammen — ich will das Problem sofort angehen." },
+        { type: "flucht", label: "Unruhe im Bauch — ich will am liebsten weg aus der Situation." },
+        { type: "erstarrung", label: "Ich werde eigenartig ruhig, fast wie betäubt." },
+        { type: "anpassung", label: "Ich denke zuerst daran, wen ich damit nicht enttäuschen darf." }
+      ]
+    },
+    {
+      text: "Was passiert mit Deiner Stimme, wenn Du emotional unter Druck gerätst?",
+      options: [
+        { type: "kampf", label: "Sie wird lauter, bestimmter, manchmal schärfer als beabsichtigt." },
+        { type: "flucht", label: "Sie wird schneller — ich rede mich fast in Erklärungen hinein." },
+        { type: "erstarrung", label: "Sie wird leiser oder verstummt für einen Moment ganz." },
+        { type: "anpassung", label: "Sie wird weicher — ich passe mich dem Ton der anderen Person an." }
+      ]
+    },
+    {
+      text: "Wie ist Dein Schlaf in stressigen Phasen typischerweise?",
+      options: [
+        { type: "kampf", label: "Ich schlafe schlecht ein, der Kopf kreist um ungelöste Konflikte." },
+        { type: "flucht", label: "Ich wache nachts auf, angespannt, als müsste ich vor etwas fliehen." },
+        { type: "erstarrung", label: "Ich schlafe viel — und wache trotzdem erschöpft auf." },
+        { type: "anpassung", label: "Ich schlafe erst, wenn ich sicher bin, dass alle anderen versorgt sind." }
+      ]
+    },
+    {
+      text: "Was machen Kiefer, Nacken und Schultern bei Dir unter Belastung?",
+      options: [
+        { type: "kampf", label: "Sie sind hart, angespannt — fast kampfbereit." },
+        { type: "flucht", label: "Sie sind zittrig, unruhig — wie sprungbereit." },
+        { type: "erstarrung", label: "Sie fühlen sich schwer an, fast wie eingefroren." },
+        { type: "anpassung", label: "Ich merke die Spannung oft erst, wenn sie schon chronisch ist." }
+      ]
+    },
+    {
+      text: "In einer Diskussion, die zu eskalieren droht, bist Du eher …",
+      options: [
+        { type: "kampf", label: "direkt und konfrontativ — manchmal schneller scharf, als ich vorhatte." },
+        { type: "flucht", label: "auf dem Sprung, das Gespräch möglichst zu verlassen." },
+        { type: "erstarrung", label: "wie blockiert — mir fällt im Moment nichts mehr ein, was ich sagen soll." },
+        { type: "anpassung", label: "bemüht zu vermitteln und die Situation zu entschärfen, auch auf eigene Kosten." }
+      ]
+    },
+    {
+      text: "Wie reagierst Du auf unerwartete Kritik?",
+      options: [
+        { type: "kampf", label: "Mit innerem oder offenem Widerstand — fast reflexartig." },
+        { type: "flucht", label: "Mit dem Impuls, das Gespräch schnell zu beenden." },
+        { type: "erstarrung", label: "Mit einem Leeregefühl — ich kann im Moment nicht reagieren." },
+        { type: "anpassung", label: "Mit sofortiger Entschuldigung, auch wenn ich nicht sicher bin, ob sie berechtigt war." }
+      ]
+    },
+    {
+      text: "Wie fühlt sich Erschöpfung bei Dir typischerweise an?",
+      options: [
+        { type: "kampf", label: "Gereizt, unruhig, wie \"auf 180\"." },
+        { type: "flucht", label: "Rastlos — als könnte ich trotzdem nicht zur Ruhe kommen." },
+        { type: "erstarrung", label: "Bleiern, wie abgeschaltet, ohne Antrieb." },
+        { type: "anpassung", label: "Ich merke sie erst, wenn ich völlig am Ende bin — vorher funktioniere ich einfach." }
+      ]
+    },
+    {
+      text: "Was brauchst Du am meisten, wenn Du wirklich reguliert — also spürbar entspannt — bist?",
+      options: [
+        { type: "kampf", label: "Bewegung, ein Ventil für die aufgestaute Energie." },
+        { type: "flucht", label: "Sicherheit — das Gefühl, dass ich gerade nirgendwo hinweg muss." },
+        { type: "erstarrung", label: "Sanfte Aktivierung, etwas, das mich behutsam zurückholt." },
+        { type: "anpassung", label: "Erlaubnis, auch einmal an mich selbst zu denken." }
+      ]
+    }
+  ];
+
+  const TYPES = {
+    kampf: {
+      name: "Kampf-Typ",
+      subtitle: "Sympathikus aktiv — Richtung Konfrontation",
+      description:
+        "Dein Nervensystem reagiert auf Belastung mit Mobilisierung nach außen: Energie, Anspannung und der Impuls, ein Problem sofort anzugehen oder eine Situation zu klären, sind für Dich typisch. Das macht Dich handlungsfähig und durchsetzungsstark — kann aber auch schneller eskalieren, als Dir lieb ist, wenn die Aktivierung keinen Raum zur Regulation bekommt.",
+      signals: [
+        "Kieferanspannung, geballte Fäuste",
+        "Erhöhter Puls, Hitzegefühl",
+        "Reizbarkeit, kurze Zündschnur",
+        "Schlafprobleme durch nachwirkende Anspannung"
+      ],
+      recommendations: [
+        "Bewegung als Ventil: Kurze, intensive Einheiten (zügiges Gehen, Treppen, ein paar Kniebeugen) bauen mobilisierte Energie gezielt ab, bevor sie sich in Worten entlädt.",
+        "Verzögerung einbauen: Vor einer Reaktion bewusst drei tiefe Atemzüge nehmen — das verschafft dem präfrontalen Kortex Zeit zur Einordnung, bevor der Impuls handelt.",
+        "Kiefer und Nacken regelmäßig prüfen: Mehrmals täglich kurz checken und lösen, da sich Anspannung dort oft unbemerkt festsetzt."
+      ]
+    },
+    flucht: {
+      name: "Flucht-Typ",
+      subtitle: "Sympathikus aktiv — Richtung Rückzug",
+      description:
+        "Auch bei Dir mobilisiert das System Energie — aber die Richtung ist Distanz statt Konfrontation. Unruhe, das Bedürfnis, einer Situation zu entkommen, und ein innerlich wacher, oft leicht überaktivierter Zustand sind typisch. Diese Wachsamkeit kann Dich vorausschauend machen, aber auch daran hindern, wirklich anzukommen.",
+      signals: [
+        "Zittern, flacher oder schneller Atem",
+        "Unruhe in Beinen oder Händen",
+        "Herzklopfen in an sich neutralen Situationen",
+        "Schwierigkeiten, stillzusitzen oder abzuschalten"
+      ],
+      recommendations: [
+        "Erdungsübung nutzen: Bewusst die Füße am Boden spüren, das eigene Gewicht wahrnehmen — das signalisiert dem Nervensystem, dass Fliehen gerade nicht nötig ist.",
+        "Ausatmung verlängern: Länger ausatmen als einatmen, z. B. 4 Sekunden ein, 6–8 Sekunden aus — das aktiviert gezielt den beruhigenden Teil des vegetativen Nervensystems.",
+        "Einen festen Anker im Alltag schaffen: Ein wiederkehrender Ort oder ein kleines Ritual, an dem sich Dein System erlauben darf: Hier ist es sicher, hier muss ich nirgendwohin."
+      ]
+    },
+    erstarrung: {
+      name: "Erstarrungs-Typ",
+      subtitle: "Dorsale Aktivierung — Shutdown",
+      description:
+        "Wenn Belastung zu groß oder zu lang anhält, schaltet Dein System nicht auf Angriff oder Flucht, sondern auf Rückzug nach innen. Das fühlt sich oft wie Leere, Schwere oder emotionale Taubheit an — eine Schutzreaktion des Nervensystems, kein persönliches Versagen und keine Faulheit.",
+      signals: [
+        "Schwere in Armen und Beinen, Taubheitsgefühl",
+        "Verlangsamter Atem, geringe Energie",
+        "Konzentrationsschwierigkeiten, Gedankenleere",
+        "Rückzugsbedürfnis, Gefühl wie unter einer Glasglocke"
+      ],
+      recommendations: [
+        "Sanft statt schnell aktivieren: Kleine sensorische Reize — kaltes Wasser über die Handgelenke, bewusst einen Geschmack oder eine Textur wahrnehmen — helfen dem System, behutsam zurückzukehren.",
+        "In Mikrobewegungen starten: Erst Finger, Zehen oder Schultern bewegen, bevor größere Aktivität folgt — der Weg zurück in den Körper beginnt im Kleinen.",
+        "Sehr kleine nächste Schritte definieren: Nicht \"aufräumen\", sondern \"einen Gegenstand wegräumen\" — Struktur, die nicht überfordert."
+      ]
+    },
+    anpassung: {
+      name: "Anpassungs-Typ",
+      subtitle: "Beschwichtigung — Fokus auf andere",
+      description:
+        "Dein System reguliert Belastung, indem es sich auf die Bedürfnisse anderer ausrichtet — oft, bevor Dir die eigenen überhaupt bewusst werden. Das macht Dich empathisch und verlässlich, birgt aber das Risiko, eigene Warnsignale spät oder gar nicht wahrzunehmen, bis die Erschöpfung schon da ist.",
+      signals: [
+        "Anspannung, die erst spät bemerkt wird",
+        "Erschöpfung, die \"aus dem Nichts\" kommt",
+        "Angehaltener Atem in schwierigen Gesprächen",
+        "Schwierigkeiten, eigene Grenzen zu spüren, bevor sie überschritten sind"
+      ],
+      recommendations: [
+        "Feste Check-in-Zeiten einplanen: 2–3 Momente am Tag, unabhängig von anderen, bewusst fragen: Was brauche ich gerade wirklich?",
+        "Mikro-Grenzen üben: In kleinen, risikoarmen Situationen bewusst \"nein\" oder \"später\" sagen — das gibt dem Nervensystem neue Erfahrung.",
+        "Bedürfnisse konkret benennen: Statt vage \"Erholung\" lieber \"20 Minuten allein, ohne Ansprache\" — konkrete Formulierungen lassen sich leichter einfordern."
+      ]
+    }
+  };
+
+  function computeResult(answers) {
+    const counts = { kampf: 0, flucht: 0, erstarrung: 0, anpassung: 0 };
+    answers.forEach(function (a) { if (a) counts[a] += 1; });
+    const sorted = Object.entries(counts).sort(function (a, b) { return b[1] - a[1]; });
+    const primaryType = sorted[0][0];
+    const primaryScore = sorted[0][1];
+    const secondaryType = sorted[1][0];
+    const secondaryScore = sorted[1][1];
+    const showSecondary = secondaryScore > 0 && primaryScore - secondaryScore <= 1;
+    return { primaryType: primaryType, secondaryType: showSecondary ? secondaryType : null };
+  }
+
+  function IntroScreen(props) {
+    return h(
+      "div",
+      { className: "app" },
+      h("div", { className: "eyebrow" }, "Selbsttest · 8 Fragen · ca. 3 Minuten"),
+      h("h1", null, "Neuroregulations-Typ Quiz"),
+      h(
+        "p",
+        { className: "subtitle" },
+        "8 kurze Fragen zu Deinen typischen Stressreaktionen und Körperempfindungen. Am Ende erhältst Du Deinen persönlichen Neuro-Typ mit konkreten, sofort umsetzbaren Empfehlungen."
+      ),
+      h(
+        "div",
+        { className: "card" },
+        h(
+          "p",
+          { style: { margin: 0 } },
+          "Beantworte jede Frage so, wie es sich für Dich im Alltag am ehesten stimmig anfühlt. Es gibt keine richtigen oder falschen Antworten — nur Deine tatsächliche Reaktion zählt."
+        ),
+        h("div", null, h("button", { onClick: props.onStart }, "Quiz starten"))
+      )
+    );
+  }
+
+  function QuestionScreen(props) {
+    const q = props.question;
+    return h(
+      "div",
+      { className: "app" },
+      h(
+        "div",
+        { className: "progress-row" },
+        h("span", null, "Frage " + (props.step + 1) + " von " + props.total),
+        h("span", null, Math.round(((props.step + 1) / props.total) * 100) + " %")
+      ),
+      h("progress", { value: props.step + 1, max: props.total }),
+      h(
+        "div",
+        { className: "card" },
+        h(
+          "fieldset",
+          null,
+          h("legend", null, q.text),
+          h(
+            "div",
+            { className: "options" },
+            q.options.map(function (opt) {
+              return h(
+                "label",
+                {
+                  className: "option" + (props.selected === opt.type ? " selected" : ""),
+                  key: opt.type
+                },
+                h("input", {
+                  type: "radio",
+                  name: "q" + props.step,
+                  checked: props.selected === opt.type,
+                  onChange: function () { props.onSelect(opt.type); }
+                }),
+                h("span", null, opt.label)
+              );
+            })
+          )
+        ),
+        h(
+          "div",
+          { className: "nav-row" },
+          props.step > 0
+            ? h("button", { className: "link-button", onClick: props.onBack }, "← Zurück")
+            : h("span", null),
+          h(
+            "button",
+            { onClick: props.onNext, disabled: !props.selected },
+            props.step + 1 === props.total ? "Ergebnis anzeigen" : "Weiter"
+          )
+        )
+      )
+    );
+  }
+
+  function ResultScreen(props) {
+    const primary = TYPES[props.result.primaryType];
+    const secondary = props.result.secondaryType ? TYPES[props.result.secondaryType] : null;
+    return h(
+      "div",
+      { className: "app" },
+      h("div", { className: "eyebrow" }, "Dein Ergebnis"),
+      h("h1", null, primary.name),
+      h("p", { className: "subtitle" }, primary.subtitle),
+      h(
+        "div",
+        { className: "card" },
+        h("p", { style: { margin: 0 } }, primary.description),
+        secondary
+          ? h(
+              "p",
+              { className: "secondary-note" },
+              "Zusätzlich zeigen sich bei Dir deutliche Anteile des " +
+                secondary.name +
+                " — Nervensystem-Muster überschneiden sich häufig, besonders in unterschiedlichen Lebensbereichen."
+            )
+          : null,
+        h(
+          "div",
+          { className: "section" },
+          h("div", { className: "section-label" }, "Typische körperliche Signale"),
+          h(
+            "ul",
+            { className: "plain" },
+            primary.signals.map(function (s, i) { return h("li", { key: i }, s); })
+          )
+        ),
+        h(
+          "div",
+          { className: "section" },
+          h("div", { className: "section-label" }, "Deine nächsten Schritte"),
+          h(
+            "ol",
+            { className: "steps" },
+            primary.recommendations.map(function (r, i) { return h("li", { key: i }, r); })
+          )
+        )
+      ),
+      h("div", null, h("button", { className: "secondary", onClick: props.onReset }, "Quiz noch einmal starten")),
+      h(
+        "p",
+        { className: "disclaimer" },
+        "Dieses Quiz bietet eine erste Orientierung zu typischen Stressreaktionsmustern des Nervensystems. Es ersetzt keine Diagnostik, Therapie oder individuelle Beratung."
+      )
+    );
+  }
+
+  function App() {
+    const screenState = useState("intro");
+    const screen = screenState[0], setScreen = screenState[1];
+    const stepState = useState(0);
+    const step = stepState[0], setStep = stepState[1];
+    const answersState = useState(new Array(QUESTIONS.length).fill(null));
+    const answers = answersState[0], setAnswers = answersState[1];
+    const selectedState = useState(null);
+    const selected = selectedState[0], setSelected = selectedState[1];
+
+    function startQuiz() {
+      setAnswers(new Array(QUESTIONS.length).fill(null));
+      setStep(0);
+      setSelected(null);
+      setScreen("quiz");
+    }
+
+    function goNext() {
+      const next = answers.slice();
+      next[step] = selected;
+      setAnswers(next);
+      if (step + 1 < QUESTIONS.length) {
+        setStep(step + 1);
+        setSelected(next[step + 1]);
+      } else {
+        setScreen("result");
+      }
+    }
+
+    function goBack() {
+      const prevStep = step - 1;
+      setStep(prevStep);
+      setSelected(answers[prevStep]);
+    }
+
+    if (screen === "intro") {
+      return h(IntroScreen, { onStart: startQuiz });
+    }
+    if (screen === "quiz") {
+      return h(QuestionScreen, {
+        question: QUESTIONS[step],
+        step: step,
+        total: QUESTIONS.length,
+        selected: selected,
+        onSelect: setSelected,
+        onNext: goNext,
+        onBack: goBack
+      });
+    }
+    const result = computeResult(answers);
+    return h(ResultScreen, { result: result, onReset: startQuiz });
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(h(App));
+})();
+</script>
